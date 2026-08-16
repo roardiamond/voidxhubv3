@@ -1,67 +1,53 @@
 # VoidXHub v3
 
-**Secure Premium Tools Hub** — rebuilt from scratch with modern stack and high security focus.
+**Secure Premium Tools Hub** — rebuilt from v1 + v2 with modern stack and high security.
 
-## Goals
+**Repo:** https://github.com/roardiamond/voidxhubv3
 
-- Merge best of v1 + v2
-- Strong authentication & authorization
-- Clean device / tool selection UI (enhanced from v1)
-- Credit system + tournament support
-- Signed download links
-- Proper admin separation
-- TypeScript end-to-end
+## What’s included so far
+
+- Modern dark neon UI (same vibe as old sites)
+- **Device Selection** page (enhanced from v1) using real images from old repo
+- Games catalog (Free Fire, BGMI, COD, Valorant, Apex) with old images
+- Dashboard (credits card style from old dashboard)
+- Tournaments page (using old tournament thumbnails)
+- Full Drizzle database schema (users, tools, licenses, tournaments, audit logs)
+- Security policy + `.env.example`
+- Next.js 15 + TypeScript + Tailwind
+
+## Images
+
+All device & game images are currently loaded from the old repo  
+`https://raw.githubusercontent.com/roardiamond/VOIDXHUB/main/...`  
+so we reuse the existing assets without re-uploading.
 
 ## Stack
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript
-- **UI**: Tailwind CSS + shadcn/ui
-- **Auth**: Better Auth or Lucia (secure sessions)
-- **Database**: PostgreSQL (Neon / Supabase recommended)
-- **ORM**: Drizzle ORM
-- **Payments**: Razorpay / Cashfree
-- **File Delivery**: Signed URLs (Cloudflare R2 / S3)
+- Next.js 15 (App Router)
+- TypeScript
+- Tailwind CSS
+- Drizzle ORM + PostgreSQL (planned)
+- Better Auth / secure sessions (next)
 
-## Planned Structure
+## How to run locally
 
-```
-src/
-├── app/
-│   ├── (auth)/
-│   ├── (dashboard)/
-│   ├── tools/
-│   ├── tournaments/
-│   └── admin/
-├── components/
-├── lib/
-│   ├── auth/
-│   ├── db/
-│   └── security/
-└── types/
+```bash
+git clone https://github.com/roardiamond/voidxhubv3.git
+cd voidxhubv3
+npm install
+npm run dev
 ```
 
-## Security Priorities
+Open http://localhost:3000
 
-1. No hardcoded secrets (all in env)
-2. Rate limiting on login, key generation, downloads
-3. Role-based access control (User / Moderator / Admin)
-4. Short-lived signed download links
-5. Full audit logging for admin actions
-6. Zod validation on every input
-7. Secure cookies + HTTPS only
-8. CORS locked to own domain
+## Next planned steps
 
-## Device Selection Feature
-
-v3 includes an improved **Device Selection** UI (inspired by v1):
-- Users can select target device type / model before accessing certain tools
-- This is metadata + UI only
-- Actual tool delivery stays behind authentication + signed links
-
-## Status
-
-🚧 Scaffolding started. Core files coming next.
+1. Real authentication (login / register)
+2. Connect PostgreSQL + migrations
+3. Credit purchase flow
+4. Signed tool download links
+5. Admin panel (separate)
+6. Proper device → tool matching logic
 
 ---
 
