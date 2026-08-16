@@ -1,11 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { DEVICES, GAMES } from "@/lib/devices";
+import { getCompatibleTools } from "@/lib/tools/matching";
 
 export default function ToolsPage() {
   const [selectedDevice, setSelectedDevice] = useState<string | null>(null);
   const [selectedGame, setSelectedGame] = useState<string | null>(null);
+
+  const compatibleTools = useMemo(() => {
+    if (!selectedDevice || !selectedGame) return [];
+    return getCompatibleTools(selectedDevice, selectedGame);
+  }, [selectedDevice, selectedGame]);
 
   return (
     <div className="min-h-screen p-4 md:p-10">
@@ -15,7 +21,7 @@ export default function ToolsPage() {
             TOOLS
           </h1>
           <p className="text-gray-400 max-w-xl mx-auto">
-            Select your device first (enhanced from v1), then choose the game. This helps deliver the best matching config.
+            Select your device first (enhanced from v1), then choose the game. Matching tools appear automatically.
           </p>
         </div>
 
@@ -32,7 +38,10 @@ export default function ToolsPage() {
             {DEVICES.map((device) => (
               <button
                 key={device.id}
-                onClick={() => setSelectedDevice(device.id)}
+                onClick={() => {
+                  setSelectedDevice(device.id);
+                  setSelectedGame(null);
+                }}
                 className={`group relative overflow-hidden rounded-2xl border transition-all ${
                   selectedDevice === device.id
                     ? "border-cyan-400 ring-2 ring-cyan-400/40 scale-[1.02]"
@@ -103,31 +112,45 @@ export default function ToolsPage() {
           </div>
         </section>
 
+        {/* Compatible Tools */}
         {selectedDevice && selectedGame && (
-          <div className="p-6 md:p-8 rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-cyan-500/5 to-purple-500/5">
-            <h3 className="text-lg font-bold text-cyan-300 mb-2">Selection Ready</h3>
-            <p className="text-gray-300">
-              Device: <span className="text-white font-medium">{selectedDevice}</span> • Game:{" "}
-              <span className="text-white font-medium">{selectedGame}</span>
-            </p>
-            <p className="text-sm text-gray-500 mt-2">
-              Next step will show available tools for this combination (login required for full access).
-            </p>
-            <div className="mt-5 flex flex-wrap gap-3">
-              <button className="px-6 py-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 hover:bg-cyan-500/30 transition font-medium">
-                View Compatible Tools →
-              </button>
-              <button
-                onClick={() => {
-                  setSelectedDevice(null);
-                  setSelectedGame(null);
-                }}
-                className="px-6 py-2.5 rounded-xl border border-white/10 text-gray-400 hover:text-white transition"
-              >
-                Reset
-              </button>
-            </div>
-          </div>
+          <section className="space-y-4">
+            <h2 className="text-xl font-bold text-cyan-300">Compatible Tools</h2>
+
+            {compatibleTools.length === 0 ? (
+              <div className="p-6 rounded-2xl border border-white/10 bg-white/5 text-gray-400">
+                No tools available for this device + game combination yet.
+              </div>
+            ) : (
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {compatibleTools.map((tool) => (
+                  <div
+                    key={tool.slug}
+                    className="rounded-2xl border border-white/10 bg-white/5 p-5 hover:border-cyan-500/40 transition"
+                  >
+                    <div className="font-bold text-lg text-white">{tool.name}</div>
+                    <div className="text-sm text-gray-400 mt-1 capitalize">{tool.game}</div>
+                    <div className="mt-4 flex items-center justify-between">
+                      <span className="text-pink-400 font-semibold">{tool.creditCost} VxH Cr</span>
+                      <button className="px-4 py-2 rounded-lg bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 text-sm hover:bg-cyan-500/30 transition">
+                        Unlock
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            <button
+              onClick={() => {
+                setSelectedDevice(null);
+                setSelectedGame(null);
+              }}
+              className="text-sm text-gray-500 hover:text-white transition"
+            >
+              ← Reset selection
+            </button>
+          </section>
         )}
       </div>
     </div>
