@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Navbar from "@/components/Navbar";
 
 export const metadata: Metadata = {
   title: "VoidXHub v3 | Premium Tools Hub",
@@ -14,6 +15,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className="min-h-screen bg-[#05050a] text-gray-100 antialiased">
+        <Navbar />
         {children}
       </body>
     </html>
